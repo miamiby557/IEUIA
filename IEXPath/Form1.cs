@@ -142,7 +142,7 @@ namespace IEXPath
             e.style.setAttribute("outline", "");
             Thread.Sleep(100);
             e.style.setAttribute("outline", "2px solid red");
-            Console.WriteLine("extractXPath(e):"+ extractXPath(e));
+            /*Console.WriteLine("extractXPath(e):"+ extractXPath(e));*/
             frmIEXPath.xpath = extractXPath(e);
             frmIEXPath.txtID = e.id;
             frmIEXPath.txtName = getElementAttribute(e, "NAME");
@@ -151,6 +151,11 @@ namespace IEXPath
             frmIEXPath.txtClass = e.className;
             frmIEXPath.txtHTML = e.innerHTML;
             frmIEXPath.txtOuterHtml = e.outerHTML;
+            Console.WriteLine("e.offsetLeft:"+ e.offsetLeft.ToString()+ ",e.offsetTop:"+ e.offsetTop.ToString()+ ",e.offsetWidth:"+ e.offsetWidth.ToString()+ ",e.offsetHeight:"+ e.offsetHeight.ToString());
+            frmIEXPath.offsetLeft = MousePosition.X;
+            frmIEXPath.offsetTop = MousePosition.Y;
+            frmIEXPath.offsetWidth = e.offsetWidth;
+            frmIEXPath.offsetHeight = e.offsetHeight;
 
         }
 
@@ -163,6 +168,10 @@ namespace IEXPath
         private static string txtClass;
         private static string txtHTML;
         private static string txtOuterHtml;
+        private static int offsetLeft;
+        private static int offsetTop;
+        private static int offsetWidth;
+        private static int offsetHeight;
 
         private string extractXPath(IHTMLElement e)
         {
@@ -357,22 +366,5 @@ namespace IEXPath
                 }
             }
         }
-
-        private void txtID_DoubleClick(object sender, EventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            Clipboard.SetText(txt.Text);
-        }
-
-        private void lstXPath_DoubleClick(object sender, EventArgs e)
-        {
-            if (lstXPath.SelectedIndex == -1)
-            {
-                return;
-            }
-
-            Clipboard.SetText(lstXPath.SelectedItem.ToString());
-        }
-
     }
 }

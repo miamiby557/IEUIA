@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -96,9 +97,26 @@ namespace IEXPath
                     dictionary.Add("txtClass", txtClass);
                     dictionary.Add("txtHTML", txtHTML);
                     dictionary.Add("txtOuterHtml", txtOuterHtml);
+
+                    // 截图
+                    Console.WriteLine("offsetLeft:" + offsetLeft.ToString() + ",offsetTop:" + offsetTop.ToString() + ",offsetWidth:" + offsetWidth.ToString() + ",offsetHeight:" + offsetHeight.ToString());
+                    Bitmap image = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50,offsetHeight+ 50);
+                    string base64FromImage = ImageUtil.GetBase64FromImage(image);
+                    dictionary.Add("screenShot", base64FromImage);
+
                     PostData(dictionary);
                 }
             }
+        }
+
+        // 保存截图
+        private Bitmap SaveImage(int x, int y, int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(width, height));
+            bitmap.Save("img.png", ImageFormat.Png);
+            return bitmap;
         }
 
 
