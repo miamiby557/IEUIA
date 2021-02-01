@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -107,7 +108,7 @@ namespace IEXPath
         {
             try
             {
-                string url = "http://localhost:63361/postData";
+                /*string url = "http://localhost:63361/postData";
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
                 req.Method = "POST";
                 req.Timeout = 4000;//设置请求超时时间，单位为毫秒
@@ -124,7 +125,19 @@ namespace IEXPath
                     clearBorderHint();
                     this.Close();
                     Application.Exit();
-                }
+                }*/
+                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //连接服务器
+                socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 10083));
+                dictionary.Add("dataType", "IE_UIA");
+                socket.Send(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dictionary)));
+                socket.Close();
+                // 关闭
+                Thread.Sleep(400);
+                this.timer1.Stop();
+                clearBorderHint();
+                this.Close();
+                Application.Exit();
             }
             catch (Exception)
             {
