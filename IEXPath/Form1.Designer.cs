@@ -65,7 +65,6 @@ namespace IEXPath
             myKeyEventHandeler = new KeyEventHandler(hook_KeyDown);
             k_hook.KeyDownEvent += myKeyEventHandeler;//钩住键按下
             k_hook.Start();//安装键盘钩子
-
         }
 
         public static IHTMLElement element;
@@ -100,9 +99,10 @@ namespace IEXPath
 
                     // 截图
                     Console.WriteLine("offsetLeft:" + offsetLeft.ToString() + ",offsetTop:" + offsetTop.ToString() + ",offsetWidth:" + offsetWidth.ToString() + ",offsetHeight:" + offsetHeight.ToString());
-                    Bitmap image = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50,offsetHeight+ 50);
-                    string base64FromImage = ImageUtil.GetBase64FromImage(image);
-                    dictionary.Add("screenShot", base64FromImage);
+                    // Bitmap image = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50,offsetHeight+ 50
+                    String imagePath = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50, offsetHeight + 50);
+                    // string base64FromImage = ImageUtil.GetBase64FromImage(image);
+                    dictionary.Add("screenShot", imagePath);
 
                     PostData(dictionary);
                 }
@@ -110,13 +110,14 @@ namespace IEXPath
         }
 
         // 保存截图
-        private Bitmap SaveImage(int x, int y, int width, int height)
+        private String SaveImage(int x, int y, int width, int height)
         {
             Bitmap bitmap = new Bitmap(width, height);
             Graphics graphics = Graphics.FromImage(bitmap);
             graphics.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(width, height));
-            bitmap.Save("img.png", ImageFormat.Png);
-            return bitmap;
+            String imagePath = Directory.GetCurrentDirectory() + "\\img.png";
+            bitmap.Save(imagePath, ImageFormat.Png);
+            return imagePath;
         }
 
 
