@@ -84,6 +84,8 @@ namespace IEXPath
             captureIE();
         }
 
+        private int clientHeight = 0;
+
         private void captureIE()
         {
             try
@@ -94,6 +96,10 @@ namespace IEXPath
 
                 if (doc2 != null)
                 {
+                    Console.WriteLine("doc2.dody.offsetHeight:" + doc2.body.offsetHeight);
+                    Console.WriteLine("doc2.parentWindow.screen.availHeight:" + doc2.parentWindow.screen.availHeight);
+                    Console.WriteLine("doc2.parentWindow.screen.height:" + doc2.parentWindow.screen.height);
+                    clientHeight = doc2.parentWindow.screen.availHeight - doc2.body.offsetHeight;
                     Point point = MousePosition;
 
                     Win32API.ScreenToClient(hWnd, ref point);
@@ -135,7 +141,35 @@ namespace IEXPath
             {
                 return;
             }
-
+            IHTMLElement parent = e.offsetParent;
+            int offsetLeft = e.offsetLeft;
+            while (parent != null)
+            {
+                offsetLeft += parent.offsetLeft;
+                parent = parent.offsetParent;
+            }
+            parent = e.offsetParent;
+            int offsetTop = e.offsetTop;
+            while (parent != null)
+            {
+                offsetTop += parent.offsetTop;
+                parent = parent.offsetParent;
+            }
+            offsetTop += clientHeight;
+            /*parent = e.offsetParent;
+            int offsetHeight = e.offsetHeight;
+            while (parent != null)
+            {
+                offsetHeight += parent.offsetHeight;
+                parent = parent.offsetParent;
+            }
+            parent = e.offsetParent;
+            int offsetWidth = e.offsetWidth;
+            while (parent != null)
+            {
+                offsetWidth += parent.offsetWidth;
+                parent = parent.offsetParent;
+            }*/
             //画红框
             e.style.setAttribute("outline", "2px solid red");
             Thread.Sleep(100);
@@ -151,9 +185,9 @@ namespace IEXPath
             frmIEXPath.txtClass = e.className;
             frmIEXPath.txtHTML = e.innerHTML;
             frmIEXPath.txtOuterHtml = e.outerHTML;
-            Console.WriteLine("e.offsetLeft:"+ e.offsetLeft.ToString()+ ",e.offsetTop:"+ e.offsetTop.ToString()+ ",e.offsetWidth:"+ e.offsetWidth.ToString()+ ",e.offsetHeight:"+ e.offsetHeight.ToString());
-            frmIEXPath.offsetLeft = MousePosition.X;
-            frmIEXPath.offsetTop = MousePosition.Y;
+            Console.WriteLine("offsetLeft:"+ offsetLeft.ToString()+ ",offsetTop:"+ offsetTop.ToString()+ ",e.offsetWidth:"+ offsetWidth.ToString()+ ",offsetHeight:"+ offsetHeight.ToString());
+            frmIEXPath.offsetLeft = offsetLeft;
+            frmIEXPath.offsetTop = offsetTop;
             frmIEXPath.offsetWidth = e.offsetWidth;
             frmIEXPath.offsetHeight = e.offsetHeight;
 

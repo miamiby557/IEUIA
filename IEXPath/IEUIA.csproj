@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="ImageUtil.cs" />
     <Compile Include="KeyboardHook.cs" />
+    <Compile Include="MouseHookHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource1.Designer.cs">

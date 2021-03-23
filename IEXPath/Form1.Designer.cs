@@ -96,11 +96,17 @@ namespace IEXPath
                     dictionary.Add("txtClass", txtClass);
                     dictionary.Add("txtHTML", txtHTML);
                     dictionary.Add("txtOuterHtml", txtOuterHtml);
+                    dictionary.Add("x", offsetLeft);
+                    dictionary.Add("y", offsetTop);
+                    dictionary.Add("w", offsetWidth);
+                    dictionary.Add("h", offsetHeight);
 
                     // 截图
-                    Console.WriteLine("offsetLeft:" + offsetLeft.ToString() + ",offsetTop:" + offsetTop.ToString() + ",offsetWidth:" + offsetWidth.ToString() + ",offsetHeight:" + offsetHeight.ToString());
+                    Console.WriteLine("SaveImage:" + offsetLeft.ToString() + ",offsetTop:" + offsetTop.ToString() + ",offsetWidth:" + offsetWidth.ToString() + ",offsetHeight:" + offsetHeight.ToString());
                     // Bitmap image = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50,offsetHeight+ 50
-                    String imagePath = this.SaveImage(offsetLeft - 100, offsetTop - 50, offsetWidth + 50, offsetHeight + 50);
+                    MouseHookHelper.SetCursorPos(0, 0);
+                    Thread.Sleep(150);
+                    String imagePath = this.SaveImage(offsetLeft, offsetTop, offsetWidth, offsetHeight);
                     // string base64FromImage = ImageUtil.GetBase64FromImage(image);
                     dictionary.Add("screenShot", imagePath);
 
@@ -127,24 +133,6 @@ namespace IEXPath
         {
             try
             {
-                /*string url = "http://localhost:63361/postData";
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-                req.Method = "POST";
-                req.Timeout = 4000;//设置请求超时时间，单位为毫秒
-                req.ContentType = "application/json";
-                byte[] data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dictionary));
-                req.ContentLength = data.Length;
-                using (Stream reqStream = req.GetRequestStream())
-                {
-                    reqStream.Write(data, 0, data.Length);
-                    reqStream.Close();
-                    // 关闭
-                    Thread.Sleep(400);
-                    this.timer1.Stop();
-                    clearBorderHint();
-                    this.Close();
-                    Application.Exit();
-                }*/
                 Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 //连接服务器
                 socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 10083));
